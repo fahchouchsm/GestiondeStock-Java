@@ -5,21 +5,28 @@ import java.sql.DriverManager;
 import java.sql.Statement;
 
 public class DatabaseManager {
-    private static final String url = "jdbc:mysql://localhost:3306/GSJava";
-    private static final String username = "root";
-    private static final String password = "";
+    private String url;
+    private String username;
+    private String password;
     private static Connection cn = null;
     public static Statement st = null;
 
-    public static void connnectDB() {
+    public DatabaseManager(String url, String username, String password) {
+        this.url = url;
+        this.username = username;
+        this.password = password;
+        connectDB();
+    }
+
+    private void connectDB() {
         try {
             if (st != null) {
-                System.out.println("Already connected to the database");
+                System.out.println("Already connected to the database 😎");
             } else {
                 Class.forName("com.mysql.cj.jdbc.Driver");
                 cn = DriverManager.getConnection(url, username, password);
                 st = cn.createStatement();
-                System.out.println("Connected to the database");
+                System.out.println("Connected to the database 🚀");
             }
         } catch (Exception e) {
             System.out.println("Error connecting to the database: " + e.getMessage());

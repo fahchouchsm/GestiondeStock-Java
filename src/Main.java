@@ -8,8 +8,7 @@ import navigation.Konsole;
 public class Main {
     public static void main(String[] args) throws Exception {
         Konsole.clearConsole();
-        DatabaseManager.connnectDB();
-        // ArrayList<Product> products = new ArrayList<Product>();
-        // Konsole.printTable(products, args);
+        DatabaseManager db = new DatabaseManager("jdbc:mysql://localhost:3306/GSJava", "root", "");
+
     }
 }
