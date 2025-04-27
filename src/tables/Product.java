@@ -52,7 +52,7 @@ public class Product extends Table {
 
     // getters
     public static String[] getColumnsNames() {
-        return new String[] { "id", "Titre", "Quantitie", "Unite", "Seuil", "Prix d'achat", "Prix unitaire" };
+        return new String[] { "id", "Titre", "Quantitie", "Unite de mesure", "Seuil", "Prix d'achat", "Prix unitaire" };
     }
 
     @Override

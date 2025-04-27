@@ -42,7 +42,7 @@ public class ProductPage extends Page {
                 }
                 break;
             case 3:
-                addItem(columnsName);
+                addItem(columnsName, null);
             default:
                 showPage(pageNum, limite);
                 break;
@@ -51,14 +51,23 @@ public class ProductPage extends Page {
 
     // TODO -
     @Override
-    protected void addItem(String[] columnsNames) {
+    protected void addItem(String[] columnsNames, String msgError) {
         Konsole.clearConsole();
         ArrayList<String> inputs = new ArrayList<>();
         for (int i = 1; i < columnsNames.length; i++) {
-            System.out.println(columnsNames[i] + " :");
+            if (i == 2) {
+                System.out.println(columnsNames[i] + " (vide sans unite de mesure) :");
+            } else {
+                System.out.println(columnsNames[i] + " :");
+            }
             System.out.flush();
             String input = Konsole.readUserLine();
             inputs.add(input);
         }
+        for (int i = 0; i < inputs.size(); i++) {
+            System.out.println(columnsNames[i + 1] + ": " + inputs.get(i));
+        }
+        new Product(inputs.get(0), Float.parseFloat(inputs.get(1)), inputs.get(2), Float.parseFloat(inputs.get(3)),
+                Float.parseFloat(inputs.get(4)), Float.parseFloat(inputs.get(5)));
     }
 }
