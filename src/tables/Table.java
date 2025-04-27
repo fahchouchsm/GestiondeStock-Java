@@ -1,4 +1,4 @@
-package classes;
+package tables;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -15,7 +15,7 @@ public abstract class Table {
         this.tableName = tableName;
     }
 
-    protected ResultSet fetchTable(String tableName, int pageNum, int limite) {
+    protected static ResultSet fetchTable(String tableName, int pageNum, int limite) {
         String query = "SELECT * FROM " + tableName + " LIMIT " + limite + " OFFSET " + (pageNum - 1) * limite;
         try {
             ResultSet rs = DatabaseManager.st.executeQuery(query);

@@ -1,4 +1,4 @@
-package classes;
+package tables;
 
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -16,6 +16,17 @@ public class Product extends Table {
     private float seuil;
     private float prixAchat;
     private float prixUnitaire;
+
+    public Product(int id, String titre, int quantite, String unite, float seuil, float prixAchat, float prixUnitaire) {
+        super("products");
+        this.id = id;
+        this.titre = titre;
+        this.quantite = quantite;
+        this.unite = unite;
+        this.seuil = seuil;
+        this.prixAchat = prixAchat;
+        this.prixUnitaire = prixUnitaire;
+    }
 
     public Product(String titre, int quantite, String unite, float seuil, float prixAchat, float prixUnitaire) {
         super("products");
@@ -45,17 +56,22 @@ public class Product extends Table {
         return new String[] { "titre", "quantitie", "unite", "seuil", "prixAchat", "prixUnitaire" };
     }
 
-    // public ArrayList<Product> getProducts(Resultset rs) {
-    // try {
-    // ArrayList<Product> products = new ArrayList<Product>();
-    // while (rs.) {
-
-    // }
-    // return products;
-    // } catch (Exception e) {
-    // e.printStackTrace();
-    // return null;
-    // }
-    // }
+    // TODO -
+    public static ArrayList<Product> getAllProducts() {
+        try {
+            ArrayList<Product> products = new ArrayList<Product>();
+            ResultSet rs = fetchTable("products", 0, 10);
+            while (rs.next()) {
+                Product p = new Product(rs.getInt("id"), rs.getString("titre"), rs.getInt("quantite"),
+                        rs.getString("unite"), rs.getFloat("seuil"), rs.getFloat("prixAchat"),
+                        rs.getFloat("prixUnitaire"));
+                products.add(p);
+            }
+            return products;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
 }
