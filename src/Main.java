@@ -9,7 +9,7 @@ public class Main {
     public static void main(String[] args) throws Exception {
         Konsole.clearConsole();
         DatabaseManager.connnectDB();
-        ArrayList<Product> products = new ArrayList<Product>();
-        Konsole.printTable(products, args);
+        // ArrayList<Product> products = new ArrayList<Product>();
+        // Konsole.printTable(products, args);
     }
 }
