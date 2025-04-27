@@ -20,7 +20,10 @@ public class Konsole {
     }
 
     public static int readUserInputInt() {
-        return sc.nextInt();
+        int input = sc.nextInt();
+        // REVIEW -
+        sc.nextLine();
+        return input;
     }
 
     public static String readUserLine() {
@@ -32,21 +35,39 @@ public class Konsole {
     }
 
     public static void showNavigator() {
-        while (true) {
-            clearConsole();
-            ProductPage productP = new ProductPage();
-            productP.showPage();
-            break;
+        clearConsole();
+        System.out.println("[1] Gestion des Produits");
+        System.out.println("[2] Gestion des Categorie");
+        System.out.println("[3] Produits avec un seuil alert");
+        System.out.println("[0] Quitter");
+        switch (readUserInputInt()) {
+            case 1:
+                ProductPage productP = new ProductPage();
+                productP.showPage(1, 10);
+                break;
+            default:
+                showNavigator();
+                break;
         }
+
     }
 
-    public static void printTable(ArrayList<? extends Table> tables, String[] columnsNames) {
+    public static void printTable(ArrayList<? extends Table> tables, String[] columns) {
+        for (String column : columns) {
+            System.out.printf("%-20s", column);
+        }
+        System.out.println();
+        String line = new String(new char[columns.length * 20]).replace("\0", "-");
+        System.out.println(line);
         for (Table table : tables) {
-            String[] rowData = table.getColumnsNames();
-            for (int i = 0; i < columnsNames.length; i++) {
+            String[] rowData = table.getAllDataAsString();
+            for (int i = 0; i < columns.length; i++) {
                 System.out.printf("%-20s", rowData[i]);
             }
             System.out.println();
         }
+        System.out.println(line);
+        System.out.println();
     }
+
 }
