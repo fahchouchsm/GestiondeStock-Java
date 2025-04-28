@@ -21,12 +21,12 @@ public class DatabaseManager {
     private void connectDB() {
         try {
             if (st != null) {
-                System.out.println("Already connected to the database 😎");
+                System.out.println("Already connected to the database");
             } else {
                 Class.forName("com.mysql.cj.jdbc.Driver");
                 cn = DriverManager.getConnection(url, username, password);
                 st = cn.createStatement();
-                System.out.println("Connected to the database 🚀");
+                System.out.println("Connected to the database");
             }
         } catch (Exception e) {
             System.out.println("Error connecting to the database: " + e.getMessage());

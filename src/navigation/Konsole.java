@@ -70,4 +70,11 @@ public class Konsole {
         System.out.println();
     }
 
+    public static void sleep(int ms) {
+        try {
+            Thread.sleep(ms);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

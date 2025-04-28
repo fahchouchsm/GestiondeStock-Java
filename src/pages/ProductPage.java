@@ -43,31 +43,52 @@ public class ProductPage extends Page {
                 break;
             case 3:
                 addItem(columnsName, null);
+                showPage(pageNum, limite);
             default:
                 showPage(pageNum, limite);
                 break;
         }
     }
 
-    // TODO -
-    @Override
     protected void addItem(String[] columnsNames, String msgError) {
         Konsole.clearConsole();
         ArrayList<String> inputs = new ArrayList<>();
+
         for (int i = 1; i < columnsNames.length; i++) {
+            String inputAddon;
             if (i == 2) {
-                System.out.println(columnsNames[i] + " (vide sans unite de mesure) :");
-            } else {
-                System.out.println(columnsNames[i] + " :");
+                inputAddon = " (optional)";
             }
+            if (i == 3) {
+                inputAddon = " ";
+            } else {
+                inputAddon = " :";
+            }
+            System.out.println("- " + columnsNames[i] + inputAddon);
             System.out.flush();
-            String input = Konsole.readUserLine();
-            inputs.add(input);
+
+            String input = Konsole.readUserLine().trim();
+
+            if (i != 2 && i != 3 && i != 4) {
+                while (input.isEmpty()) {
+                    System.out.println("Le champ requis! Essayer à nouveau :");
+                    input = Konsole.readUserLine().trim();
+                }
+            }
+
+            inputs.add(input.isEmpty() ? null : input);
         }
-        for (int i = 0; i < inputs.size(); i++) {
-            System.out.println(columnsNames[i + 1] + ": " + inputs.get(i));
-        }
-        new Product(inputs.get(0), Float.parseFloat(inputs.get(1)), inputs.get(2), Float.parseFloat(inputs.get(3)),
-                Float.parseFloat(inputs.get(4)), Float.parseFloat(inputs.get(5)));
+
+        new Product(
+                inputs.get(0),
+                Float.parseFloat(inputs.get(1)),
+                inputs.get(2),
+                inputs.get(3) == null ? 0.0f : Float.parseFloat(inputs.get(3)),
+                inputs.get(4) == null ? 0.0f : Float.parseFloat(inputs.get(4)),
+                Float.parseFloat(inputs.get(5)));
+
+        System.out.println("Vous avez Ajouter un produit " + inputs.get(0) + "....");
+        Konsole.sleep(3000);
     }
+
 }
