@@ -21,7 +21,6 @@ public class Konsole {
 
     public static int readUserInputInt() {
         int input = sc.nextInt();
-        // REVIEW -
         sc.nextLine();
         return input;
     }
@@ -60,7 +59,7 @@ public class Konsole {
         String line = new String(new char[columns.length * 20]).replace("\0", "-");
         System.out.println(line);
         for (Table table : tables) {
-            String[] rowData = table.getAllDataAsString();
+            String[] rowData = table.getRowsDataAsString();
             for (int i = 0; i < columns.length; i++) {
                 System.out.printf("%-20s", rowData[i]);
             }

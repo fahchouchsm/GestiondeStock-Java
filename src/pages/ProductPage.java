@@ -86,7 +86,7 @@ public class ProductPage extends Page {
                 inputs.get(3) == null ? 0.0f : Float.parseFloat(inputs.get(3)),
                 inputs.get(4) == null ? 0.0f : Float.parseFloat(inputs.get(4)),
                 Float.parseFloat(inputs.get(5)));
-
+        Konsole.clearConsole();
         System.out.println("Vous avez Ajouter un produit " + inputs.get(0) + "....");
         Konsole.sleep(3000);
     }

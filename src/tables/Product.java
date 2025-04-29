@@ -1,9 +1,9 @@
 package tables;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
-
 import database.DatabaseManager;
 
 public class Product extends Table {
@@ -35,46 +35,59 @@ public class Product extends Table {
         this.seuil = seuil;
         this.prixAchat = prixAchat;
         this.prixUnitaire = prixUnitaire;
+
         try {
-            String query = "INSERT INTO " + tableName
-                    + " (titre, quantite, unite, seuil, prixAchat, prixUnitaire) VALUES ('"
-                    + titre + "', " + quantite + ", '" + unite + "', " + seuil + ", " + prixAchat + ", " + prixUnitaire
-                    + ")";
-            DatabaseManager.st.executeUpdate(query, Statement.RETURN_GENERATED_KEYS);
-            ResultSet rs = DatabaseManager.st.getGeneratedKeys();
-            if (rs.next()) {
-                this.id = rs.getInt(1);
+            String query = "INSERT INTO " + tableName +
+                    " (titre, quantite, unite, seuil, prixAchat, prixUnitaire) VALUES (?, ?, ?, ?, ?, ?)";
+            PreparedStatement pst = DatabaseManager.getConnection()
+                    .prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+            pst.setString(1, titre);
+            pst.setFloat(2, quantite);
+            pst.setString(3, unite);
+            pst.setFloat(4, seuil);
+            pst.setFloat(5, prixAchat);
+            pst.setFloat(6, prixUnitaire);
+
+            int rows = pst.executeUpdate();
+            if (rows > 0) {
+                ResultSet rs = pst.getGeneratedKeys();
+                if (rs.next()) {
+                    this.id = rs.getInt(1);
+                    System.out.println("🆔 New product ID: " + this.id);
+                }
+                rs.close();
             }
+
+            pst.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    // getters
     public static String[] getColumnsNames() {
-        return new String[] { "id", "Titre", "Quantitie", "Unite de mesure", "Seuil", "Prix d'achat", "Prix unitaire" };
+        return new String[] {
+                "id", "Titre", "Quantité", "Unité de mesure", "Seuil d'alerte", "Prix d'achat", "Prix unitaire"
+        };
     }
 
     @Override
-    public String[] getAllDataAsString() {
-        String uniteNull = unite;
-        if (uniteNull == null) {
-            uniteNull = "unitaire";
-        }
-        return new String[] { Integer.toString(id), titre, Float.toString(quantite),
-                uniteNull, Float.toString(seuil),
-                Float.toString(prixAchat), Float.toString(prixUnitaire) };
+    public String[] getRowsDataAsString() {
+        String uniteClean = (unite == null || unite.isEmpty()) ? "unitaire" : unite;
+        return new String[] {
+                Integer.toString(id), titre, Float.toString(quantite),
+                uniteClean, Float.toString(seuil), Float.toString(prixAchat), Float.toString(prixUnitaire)
+        };
     }
 
-    // TODO -
-    public static ArrayList<Product> getAllProducts(int pageNum, int limite) {
+    public static ArrayList<Product> getAllProducts(int pageNum, int limit) {
         try {
-            ArrayList<Product> products = new ArrayList<Product>();
-            ResultSet rs = fetchTable("products", pageNum, limite);
+            ArrayList<Product> products = new ArrayList<>();
+            ResultSet rs = fetchTable("products", pageNum, limit);
             while (rs.next()) {
-                Product p = new Product(rs.getInt("id"), rs.getString("titre"), rs.getFloat("quantite"),
-                        rs.getString("unite"), rs.getFloat("seuil"), rs.getFloat("prixAchat"),
-                        rs.getFloat("prixUnitaire"));
+                Product p = new Product(
+                        rs.getInt("id"), rs.getString("titre"), rs.getFloat("quantite"),
+                        rs.getString("unite"), rs.getFloat("seuil"),
+                        rs.getFloat("prixAchat"), rs.getFloat("prixUnitaire"));
                 products.add(p);
             }
             return products;
@@ -83,5 +96,4 @@ public class Product extends Table {
             return null;
         }
     }
-
 }

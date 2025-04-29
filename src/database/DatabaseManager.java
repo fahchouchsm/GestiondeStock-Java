@@ -2,46 +2,34 @@ package database;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.Statement;
 
 public class DatabaseManager {
-    private String url;
-    private String username;
-    private String password;
-    private static Connection cn = null;
-    public static Statement st = null;
+    private static Connection cn;
 
     public DatabaseManager(String url, String username, String password) {
-        this.url = url;
-        this.username = username;
-        this.password = password;
-        connectDB();
-    }
-
-    private void connectDB() {
         try {
-            if (st != null) {
-                System.out.println("Already connected to the database");
-            } else {
+            if (cn == null || cn.isClosed()) {
                 Class.forName("com.mysql.cj.jdbc.Driver");
                 cn = DriverManager.getConnection(url, username, password);
-                st = cn.createStatement();
-                System.out.println("Connected to the database");
+                System.out.println("✅ Connected to DB");
+            } else {
+                System.out.println("⚠️ Already connected");
             }
         } catch (Exception e) {
-            System.out.println("Error connecting to the database: " + e.getMessage());
+            System.out.println("❌ Error connecting: " + e.getMessage());
         }
+    }
+
+    public static Connection getConnection() {
+        return cn;
     }
 
     public static void closeConnection() {
         try {
-            if (st != null) {
-                st.close();
-            }
-            if (cn != null) {
+            if (cn != null && !cn.isClosed()) {
                 cn.close();
+                System.out.println("🔒 Connection closed");
             }
-            System.out.println("Connection closed");
         } catch (Exception e) {
             e.printStackTrace();
         }

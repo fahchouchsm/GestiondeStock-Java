@@ -9,8 +9,7 @@ public abstract class Table {
     protected String tableName;
 
     // abstract methods
-
-    public abstract String[] getAllDataAsString();
+    public abstract String[] getRowsDataAsString();
 
     public Table(String tableName) {
         this.tableName = tableName;
