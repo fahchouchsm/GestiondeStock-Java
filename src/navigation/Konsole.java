@@ -3,6 +3,7 @@ package navigation;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import actionsPages.SetQuantitePage;
 import pages.CategoriePage;
 import pages.ProductPage;
 import tables.Table;
@@ -43,7 +44,8 @@ public class Konsole {
         clearConsole();
         System.out.println("[1] Gestion des Produits");
         System.out.println("[2] Gestion des Categorie");
-        System.out.println("[3] Produits avec un seuil alert");
+        System.out.println("[3] Modifier Quantité d'un Produit");
+        System.out.println("[4] Produits avec un seuil alert");
         System.out.println("[0] Quitter");
         switch (readUserInputInt()) {
             case 1:
@@ -53,6 +55,10 @@ public class Konsole {
             case 2:
                 CategoriePage categorieP = new CategoriePage();
                 categorieP.showPage(1, 100);
+                break;
+            case 3:
+                SetQuantitePage setQuantiteP = new SetQuantitePage();
+                setQuantiteP.showPage();
                 break;
             default:
                 showNavigator();

@@ -84,7 +84,7 @@ public class Product extends Table {
             ResultSet rs = fetchTable("products", pageNum, limit);
             while (rs.next()) {
                 Product p = new Product(
-                        rs.getInt("id"), rs.getString("titre"), rs.getFloat("quantite"),
+                        rs.getInt("idProduit"), rs.getString("titre"), rs.getFloat("quantite"),
                         rs.getString("unite"), rs.getFloat("seuil"),
                         rs.getFloat("prixAchat"), rs.getFloat("prixUnitaire"));
                 products.add(p);
@@ -94,5 +94,128 @@ public class Product extends Table {
             e.printStackTrace();
             return null;
         }
+    }
+
+    // New methods required by SetQuantitePage
+    public static Product getProductById(int id) {
+        try {
+            String query = "SELECT * FROM products WHERE idProduit = ?";
+            PreparedStatement pst = DatabaseManager.getConnection().prepareStatement(query);
+            pst.setInt(1, id);
+
+            ResultSet rs = pst.executeQuery();
+            if (rs.next()) {
+                return new Product(
+                        rs.getInt("idProduit"),
+                        rs.getString("titre"),
+                        rs.getFloat("quantite"),
+                        rs.getString("unite"),
+                        rs.getFloat("seuil"),
+                        rs.getFloat("prixAchat"),
+                        rs.getFloat("prixUnitaire"));
+            }
+            rs.close();
+            pst.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static Product searchProductByTitle(String searchTerm) {
+        try {
+            String query = "SELECT * FROM products WHERE titre LIKE ? LIMIT 1";
+            PreparedStatement pst = DatabaseManager.getConnection().prepareStatement(query);
+            pst.setString(1, "%" + searchTerm + "%");
+
+            ResultSet rs = pst.executeQuery();
+            if (rs.next()) {
+                return new Product(
+                        rs.getInt("idProduit"),
+                        rs.getString("titre"),
+                        rs.getFloat("quantite"),
+                        rs.getString("unite"),
+                        rs.getFloat("seuil"),
+                        rs.getFloat("prixAchat"),
+                        rs.getFloat("prixUnitaire"));
+            }
+            rs.close();
+            pst.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public void update() {
+        try {
+            String query = "UPDATE products SET titre = ?, quantite = ?, unite = ?, seuil = ?, prixAchat = ?, prixUnitaire = ? WHERE idProduit = ?";
+            PreparedStatement pst = DatabaseManager.getConnection().prepareStatement(query);
+            pst.setString(1, titre);
+            pst.setFloat(2, quantite);
+            pst.setString(3, unite);
+            pst.setFloat(4, seuil);
+            pst.setFloat(5, prixAchat);
+            pst.setFloat(6, prixUnitaire);
+            pst.setInt(7, id);
+
+            pst.executeUpdate();
+            pst.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Getters and setters
+    public int getId() {
+        return id;
+    }
+
+    public String getTitre() {
+        return titre;
+    }
+
+    public void setTitre(String titre) {
+        this.titre = titre;
+    }
+
+    public float getQuantite() {
+        return quantite;
+    }
+
+    public void setQuantite(float quantite) {
+        this.quantite = quantite;
+    }
+
+    public String getUnite() {
+        return unite;
+    }
+
+    public void setUnite(String unite) {
+        this.unite = unite;
+    }
+
+    public float getSeuil() {
+        return seuil;
+    }
+
+    public void setSeuil(float seuil) {
+        this.seuil = seuil;
+    }
+
+    public float getPrixAchat() {
+        return prixAchat;
+    }
+
+    public void setPrixAchat(float prixAchat) {
+        this.prixAchat = prixAchat;
+    }
+
+    public float getPrixUnitaire() {
+        return prixUnitaire;
+    }
+
+    public void setPrixUnitaire(float prixUnitaire) {
+        this.prixUnitaire = prixUnitaire;
     }
 }
