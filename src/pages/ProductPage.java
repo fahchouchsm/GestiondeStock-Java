@@ -6,7 +6,6 @@ import navigation.Konsole;
 import tables.Product;
 
 public class ProductPage extends Page {
-
     public ProductPage() {
         super("Gestion des Produits");
     }

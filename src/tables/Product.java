@@ -53,7 +53,6 @@ public class Product extends Table {
                 ResultSet rs = pst.getGeneratedKeys();
                 if (rs.next()) {
                     this.id = rs.getInt(1);
-                    System.out.println("🆔 New product ID: " + this.id);
                 }
                 rs.close();
             }

@@ -3,6 +3,7 @@ package tables;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+
 import database.DatabaseManager;
 
 public class Categorie extends Table {
@@ -42,6 +43,25 @@ public class Categorie extends Table {
             e.printStackTrace();
         }
     }
+
+    public static Categorie getCategorie(int orderNum) {
+        try {
+            String query = "SELECT * FROM categories c ORDER BY c.idCategorie LIMIT 1 OFFSET ?";
+            PreparedStatement ps = DatabaseManager.getConnection().prepareStatement(query);
+            ps.setInt(1, orderNum - 1);
+            ResultSet rs = ps.executeQuery();
+            rs.next();
+            return new Categorie(rs.getInt("idCategorie"),
+                    rs.getString("nom"),
+                    rs.getString("description"));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    // TODO
+    // public int getCategorieSearch(String input) {}
 
     @Override
     public String[] getRowsDataAsString() {

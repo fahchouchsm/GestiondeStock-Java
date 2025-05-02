@@ -3,6 +3,7 @@ package navigation;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import pages.CategoriePage;
 import pages.ProductPage;
 import tables.Table;
 
@@ -44,6 +45,10 @@ public class Konsole {
                 ProductPage productP = new ProductPage();
                 productP.showPage(1, 10);
                 break;
+            case 2:
+                CategoriePage categorieP = new CategoriePage();
+                categorieP.showPage(1, 100);
+                break;
             default:
                 showNavigator();
                 break;
@@ -52,16 +57,26 @@ public class Konsole {
     }
 
     public static void printTable(ArrayList<? extends Table> tables, String[] columns) {
+        final int columnWidth = 20;
+
         for (String column : columns) {
-            System.out.printf("%-20s", column);
+            String truncated = column.length() > columnWidth - 4
+                    ? column.substring(0, columnWidth - 4) + "..."
+                    : column;
+            System.out.printf("%-" + columnWidth + "s", truncated);
         }
         System.out.println();
-        String line = new String(new char[columns.length * 20]).replace("\0", "-");
+        String line = new String(new char[columns.length * columnWidth]).replace("\0", "-");
         System.out.println(line);
+
         for (Table table : tables) {
             String[] rowData = table.getRowsDataAsString();
             for (int i = 0; i < columns.length; i++) {
-                System.out.printf("%-20s", rowData[i]);
+                String cell = rowData[i];
+                String truncated = cell.length() > columnWidth - 5
+                        ? cell.substring(0, columnWidth - 5) + "..."
+                        : cell;
+                System.out.printf("%-" + columnWidth + "s", truncated);
             }
             System.out.println();
         }
