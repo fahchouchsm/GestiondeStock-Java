@@ -3,6 +3,7 @@ package tables;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 import database.DatabaseManager;
 
@@ -60,11 +61,49 @@ public class Categorie extends Table {
         }
     }
 
+    public static ArrayList<Product> getCategorieProducts(int i, int limit) {
+        ArrayList<Product> products = new ArrayList<>();
+        try {
+            String query = "SELECT p.idProduit, p.titre, p.quantite, p.unite, p.seuil, p.prixAchat, p.prixUnitaire  FROM categorie_produit cp INNER JOIN products c on cp.idProduit = c.idProduit WHERE cp.idCategorie = ? LIMIT ?";
+            PreparedStatement ps = DatabaseManager.getConnection().prepareStatement(query);
+            ps.setInt(1, i);
+            ps.setInt(2, limit);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                products.add(new Product(rs.getInt("idProduit"), rs.getString("titre"), rs.getFloat(
+                        "quantite"), rs.getString("unite"), rs.getFloat("seuil"), rs.getFloat("prixAchat"),
+                        rs.getFloat("prixUnitaire")));
+            }
+            return products;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return products;
+        }
+    }
+
     // TODO
     // public int getCategorieSearch(String input) {}
 
     @Override
     public String[] getRowsDataAsString() {
         return new String[] { Integer.toString(id), nom, description };
+    }
+
+    public static String[] getColumnsNamesForProducts() {
+        return new String[] {
+                "ProduitID", "Titre", "Quantité", "Unité de mesure", "Prix unitaire"
+        };
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getNom() {
+        return nom;
+    }
+
+    public String getDescription() {
+        return description;
     }
 }

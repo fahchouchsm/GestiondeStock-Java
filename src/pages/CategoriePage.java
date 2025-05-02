@@ -14,7 +14,13 @@ public class CategoriePage extends Page {
         Konsole.clearConsole();
         Konsole.showTitle(pageName);
         Categorie currentCat = Categorie.getCategorie(pageNum);
-        // TODO
+        System.out.println(currentCat.getNom());
+        System.out.println(currentCat.getDescription());
+        Konsole.showLine();
+        System.out.println("Nom du categorie :");
+        System.out.println(" - " + currentCat.getNom());
+        System.out.println("Description :");
+        System.out.println(" - " + currentCat.getDescription());
     }
 
     @Override
