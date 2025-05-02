@@ -41,7 +41,7 @@ public class ProductPage extends Page {
                 }
                 break;
             case 3:
-                addItem(columnsName, null);
+                addItem(columnsName);
                 showPage(pageNum, limite);
             default:
                 showPage(pageNum, limite);
@@ -49,7 +49,7 @@ public class ProductPage extends Page {
         }
     }
 
-    protected void addItem(String[] columnsNames, String msgError) {
+    protected void addItem(String[] columnsNames) {
         Konsole.clearConsole();
         ArrayList<String> inputs = new ArrayList<>();
 

@@ -10,5 +10,5 @@ public abstract class Page {
     // abstract methods
     public abstract void showPage(int pageNum, int limite);
 
-    protected abstract void addItem(String[] columnsNames, String msgError);
+    protected abstract void addItem(String[] columnsNames);
 }

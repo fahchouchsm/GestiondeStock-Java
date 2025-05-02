@@ -51,23 +51,26 @@ public class Categorie extends Table {
             PreparedStatement ps = DatabaseManager.getConnection().prepareStatement(query);
             ps.setInt(1, orderNum - 1);
             ResultSet rs = ps.executeQuery();
-            rs.next();
-            return new Categorie(rs.getInt("idCategorie"),
-                    rs.getString("nom"),
-                    rs.getString("description"));
+            if (rs.next()) {
+                return new Categorie(rs.getInt("idCategorie"),
+                        rs.getString("nom"),
+                        rs.getString("description"));
+            } else {
+                return null;
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
     }
 
-    public static ArrayList<Product> getCategorieProducts(int i, int limit) {
+    public static ArrayList<Product> getCategorieProducts(int catId, int limite) {
         ArrayList<Product> products = new ArrayList<>();
         try {
-            String query = "SELECT p.idProduit, p.titre, p.quantite, p.unite, p.seuil, p.prixAchat, p.prixUnitaire  FROM categorie_produit cp INNER JOIN products c on cp.idProduit = c.idProduit WHERE cp.idCategorie = ? LIMIT ?";
+            String query = "SELECT p.idProduit, p.titre, p.quantite, p.unite, p.seuil, p.prixAchat, p.prixUnitaire  FROM categorie_products cp INNER JOIN products p on cp.idProduit = p.idProduit WHERE cp.idCategorie = ? LIMIT ?";
             PreparedStatement ps = DatabaseManager.getConnection().prepareStatement(query);
-            ps.setInt(1, i);
-            ps.setInt(2, limit);
+            ps.setInt(1, catId);
+            ps.setInt(2, limite);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 products.add(new Product(rs.getInt("idProduit"), rs.getString("titre"), rs.getFloat(
@@ -81,9 +84,6 @@ public class Categorie extends Table {
         }
     }
 
-    // TODO
-    // public int getCategorieSearch(String input) {}
-
     @Override
     public String[] getRowsDataAsString() {
         return new String[] { Integer.toString(id), nom, description };
@@ -93,6 +93,10 @@ public class Categorie extends Table {
         return new String[] {
                 "ProduitID", "Titre", "Quantité", "Unité de mesure", "Prix unitaire"
         };
+    }
+
+    public static String[] getColumsNames() {
+        return new String[] { "Id", "Nom du Categorie", "Description" };
     }
 
     public int getId() {
