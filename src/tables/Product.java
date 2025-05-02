@@ -166,6 +166,63 @@ public class Product extends Table {
         }
     }
 
+    // Add this method to the Product class
+    public static ArrayList<Product> searchProductsByTitle(String searchTerm) {
+        try {
+            ArrayList<Product> products = new ArrayList<>();
+            String query = "SELECT * FROM products WHERE titre LIKE ?";
+            PreparedStatement pst = DatabaseManager.getConnection().prepareStatement(query);
+            pst.setString(1, "%" + searchTerm + "%");
+
+            ResultSet rs = pst.executeQuery();
+            while (rs.next()) {
+                Product p = new Product(
+                        rs.getInt("idProduit"),
+                        rs.getString("titre"),
+                        rs.getFloat("quantite"),
+                        rs.getString("unite"),
+                        rs.getFloat("seuil"),
+                        rs.getFloat("prixAchat"),
+                        rs.getFloat("prixUnitaire"));
+                products.add(p);
+            }
+            rs.close();
+            pst.close();
+            return products;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    // Add this method to the Product class
+    public static ArrayList<Product> getProductsBelowSeuil() {
+        try {
+            ArrayList<Product> products = new ArrayList<>();
+            String query = "SELECT * FROM products WHERE quantite < seuil";
+            PreparedStatement pst = DatabaseManager.getConnection().prepareStatement(query);
+
+            ResultSet rs = pst.executeQuery();
+            while (rs.next()) {
+                Product p = new Product(
+                        rs.getInt("idProduit"),
+                        rs.getString("titre"),
+                        rs.getFloat("quantite"),
+                        rs.getString("unite"),
+                        rs.getFloat("seuil"),
+                        rs.getFloat("prixAchat"),
+                        rs.getFloat("prixUnitaire"));
+                products.add(p);
+            }
+            rs.close();
+            pst.close();
+            return products;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     // Getters and setters
     public int getId() {
         return id;

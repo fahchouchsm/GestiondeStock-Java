@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import actionsPages.SetQuantitePage;
+import actionsPages.SeuilAlertPage;
 import pages.CategoriePage;
 import pages.ProductPage;
 import tables.Table;
@@ -59,6 +60,10 @@ public class Konsole {
             case 3:
                 SetQuantitePage setQuantiteP = new SetQuantitePage();
                 setQuantiteP.showPage();
+                break;
+            case 4:
+                SeuilAlertPage seuilAlertP = new SeuilAlertPage();
+                seuilAlertP.showPage();
                 break;
             default:
                 showNavigator();

@@ -3,7 +3,7 @@ package actionsPages;
 import navigation.Konsole;
 import tables.Product;
 
-public class SetQuantitePage {
+public class SetQuantitePage implements simplePageInt {
 
     public void showPage() {
         Konsole.clearConsole();
@@ -18,7 +18,8 @@ public class SetQuantitePage {
 
         switch (choice) {
             case 0:
-                return;
+                Konsole.showNavigator();
+                break;
             case 1:
                 selectById();
                 break;
@@ -97,7 +98,7 @@ public class SetQuantitePage {
     private void addQuantity(Product product) {
         System.out.println("Quantité actuelle: " + product.getQuantite() + " " + product.getUnite());
         System.out.println("Entrez la quantité à ajouter:");
-        float amount = Konsole.readUserInputInt(); // Changed from double to float
+        float amount = Konsole.readUserInputInt();
 
         float newQuantity = product.getQuantite() + amount;
         product.setQuantite(newQuantity);
@@ -111,7 +112,7 @@ public class SetQuantitePage {
     private void removeQuantity(Product product) {
         System.out.println("Quantité actuelle: " + product.getQuantite() + " " + product.getUnite());
         System.out.println("Entrez la quantité à retirer:");
-        float amount = Konsole.readUserInputInt(); // Changed from double to float
+        float amount = Konsole.readUserInputInt();
 
         if (amount > product.getQuantite()) {
             System.out.println("Erreur: Vous ne pouvez pas retirer plus que la quantité disponible.");
@@ -132,7 +133,7 @@ public class SetQuantitePage {
     private void setQuantity(Product product) {
         System.out.println("Quantité actuelle: " + product.getQuantite() + " " + product.getUnite());
         System.out.println("Entrez la nouvelle quantité:");
-        float newQuantity = Konsole.readUserInputInt(); // Changed from double to float
+        float newQuantity = Konsole.readUserInputInt();
 
         product.setQuantite(newQuantity);
         product.update();

@@ -16,17 +16,22 @@ public class ProductPage extends Page {
         Konsole.showTitle(pageName);
         ArrayList<Product> products = Product.getAllProducts(pageNum, limite);
         String[] columnsName = Product.getColumnsNames();
+
         if (products.isEmpty()) {
             System.out.println("Il n'y a pas de produits");
         } else {
             Konsole.printTable(products, columnsName);
         }
+
         System.out.println("[0] Quitter ");
         System.out.println("[1] Suivant");
         System.out.println("[2] Precedent");
         System.out.println("[3] Ajouter un nouveau produit");
+        System.out.println("[4] Rechercher un produit");
 
-        switch (Konsole.readUserInputInt()) {
+        int choice = Konsole.readUserInputInt();
+
+        switch (choice) {
             case 0:
                 Konsole.showNavigator();
                 break;
@@ -43,8 +48,53 @@ public class ProductPage extends Page {
             case 3:
                 addItem(columnsName);
                 showPage(pageNum, limite);
+                break;
+            case 4:
+                searchProduct();
+                break;
             default:
                 showPage(pageNum, limite);
+                break;
+        }
+    }
+
+    private void searchProduct() {
+        Konsole.clearConsole();
+        Konsole.showTitle("Recherche de Produit");
+        System.out.println("Entrez le nom du produit (ou une partie du nom):");
+        String searchTerm = Konsole.readUserLine().trim();
+
+        if (searchTerm.isEmpty()) {
+            System.out.println("Le terme de recherche ne peut pas être vide!");
+            Konsole.sleep(2000);
+            showPage(1, 10);
+            return;
+        }
+
+        ArrayList<Product> searchResults = Product.searchProductsByTitle(searchTerm);
+
+        Konsole.clearConsole();
+        Konsole.showTitle("Résultats de Recherche");
+
+        if (searchResults.isEmpty()) {
+            System.out.println("Aucun produit trouvé pour: " + searchTerm);
+        } else {
+            Konsole.printTable(searchResults, Product.getColumnsNames());
+        }
+
+        System.out.println("\n[0] Retour à la liste des produits");
+        System.out.println("[1] Nouvelle recherche");
+
+        int choice = Konsole.readUserInputInt();
+        switch (choice) {
+            case 0:
+                showPage(1, 10);
+                break;
+            case 1:
+                searchProduct();
+                break;
+            default:
+                showPage(1, 10);
                 break;
         }
     }
@@ -89,5 +139,4 @@ public class ProductPage extends Page {
         System.out.println("Vous avez Ajouter un produit " + inputs.get(0) + "....");
         Konsole.sleep(3000);
     }
-
 }

@@ -1,5 +1,5 @@
 package actionsPages;
 
-public interface simplePage {
+public interface simplePageInt {
     public void showPage();
 }
