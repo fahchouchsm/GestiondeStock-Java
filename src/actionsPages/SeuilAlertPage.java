@@ -11,7 +11,6 @@ public class SeuilAlertPage implements simplePageInt {
         Konsole.clearConsole();
         Konsole.showTitle("Produits avec un seuil d'alerte");
 
-        // Get products below alert threshold
         ArrayList<Product> alertProducts = Product.getProductsBelowSeuil();
 
         if (alertProducts.isEmpty()) {

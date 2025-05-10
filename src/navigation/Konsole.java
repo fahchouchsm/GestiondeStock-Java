@@ -50,6 +50,9 @@ public class Konsole {
         System.out.println("[4] Produits avec un seuil alert");
         System.out.println("[0] Quitter");
         switch (readUserInputInt()) {
+            case 0:
+                Konsole.clearConsole();
+                break;
             case 1:
                 ProductPage productP = new ProductPage();
                 productP.showPage(1, 10);
