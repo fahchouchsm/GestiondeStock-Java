@@ -43,7 +43,7 @@ public class Konsole {
 
     public static void showNavigator() {
         clearConsole();
-        Konsole.showTitle("Gestion de Stock FitnessHub");
+        Konsole.showTitle("Gestion de Stock FitnessPro");
         System.out.println("[1] Gestion des Produits");
         System.out.println("[2] Gestion des Categorie");
         System.out.println("[3] Modifier Quantité d'un Produit");
