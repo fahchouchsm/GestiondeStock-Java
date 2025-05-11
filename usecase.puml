@@ -1,0 +1,57 @@
+@startuml Diagramme de Cas d'Utilisation - Gestion de Stock pour la Cafétéria d'un Club Sportif
+
+' Force vertical layout
+top to bottom direction
+skinparam ranksep 80
+skinparam nodesep 50
+skinparam monochrome true
+skinparam actorStyle awesome
+
+' Acteur unique
+actor "Staff" as Staff
+
+' Cas d'utilisation principaux
+Staff --> (Naviguer dans le système) : utilise Konsole
+Staff --> (Gérer les produits) : via ProduitPage
+Staff --> (Gérer les catégories) : via CategoriePage
+Staff --> (Modifier la quantité d'un produit) : via SetQuantitePage
+Staff --> (Vérifier les alertes de seuil) : via SeuilAlertPage
+Staff --> (Restocker les produits) : propose réapprovisionnement
+Staff --> (Consulter le stock) : voit produits disponibles
+Staff --> (Enregistrer une vente) : met à jour stock
+
+' Extensions et inclusions
+(Gérer les produits) .> (Ajouter un produit) : <<include>> : ProduitPage.addItem
+(Gérer les produits) .> (Rechercher un produit par titre) : <<include>> : ProduitPage.rechercherProduit
+(Gérer les produits) .> (Afficher la liste des produits) : <<include>> : ProduitPage.afficherPage
+
+(Gérer les catégories) .> (Ajouter une catégorie) : <<include>> : CategoriePage.addItem
+(Gérer les catégories) .> (Afficher les produits par catégorie) : <<include>> : CategoriePage.afficherPage
+
+(Modifier la quantité d'un produit) .> (Sélectionner produit par ID) : <<include>> : SetQuantitePage.selectionnerParId
+(Modifier la quantité d'un produit) .> (Sélectionner produit par titre) : <<include>> : SetQuantitePage.selectionnerParTitre
+(Modifier la quantité d'un produit) .> (Ajouter quantité) : <<include>> : SetQuantitePage.ajouterQuantite
+(Modifier la quantité d'un produit) .> (Retirer quantité) : <<include>> : SetQuantitePage.retirerQuantite
+(Modifier la quantité d'un produit) .> (Définir nouvelle quantité) : <<include>> : SetQuantitePage.definirQuantite
+
+(Vérifier les alertes de seuil) .> (Afficher produits sous seuil) : <<include>> : SeuilAlertPage.afficherPage
+
+(Restocker les produits) .> (Vérifier les alertes de seuil) : <<extend>> : si stock bas
+(Restocker les produits) .> (Ajouter quantité) : <<include>> : via SetQuantitePage
+
+(Consulter le stock) .> (Afficher la liste des produits) : <<include>> : via ProduitPage
+(Consulter le stock) .> (Afficher les produits par catégorie) : <<include>> : via CategoriePage
+
+(Enregistrer une vente) .> (Retirer quantité) : <<include>> : via SetQuantitePage
+
+' Layout hints for vertical alignment
+Staff -[hidden]d- (Naviguer dans le système)
+(Naviguer dans le système) -[hidden]d- (Gérer les produits)
+(Gérer les produits) -[hidden]d- (Gérer les catégories)
+(Gérer les catégories) -[hidden]d- (Modifier la quantité d'un produit)
+(Modifier la quantité d'un produit) -[hidden]d- (Vérifier les alertes de seuil)
+(Vérifier les alertes de seuil) -[hidden]d- (Restocker les produits)
+(Restocker les produits) -[hidden]d- (Consulter le stock)
+(Consulter le stock) -[hidden]d- (Enregistrer une vente)
+
+@enduml

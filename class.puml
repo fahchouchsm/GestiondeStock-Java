@@ -1,0 +1,150 @@
+@startuml Stock Management System Class Diagram
+
+
+package "tables" {
+  abstract class Table {
+    #tableName: String
+    +Table(tableName: String)
+    +getRowsDataAsString(): String[]
+    #fetchTable(tableName: String, pageNum: int, limite: int): ResultSet
+  }
+
+  class Categorie {
+    -id: int
+    -nom: String
+    -description: String
+    +Categorie(id: int, nom: String, description: String)
+    +Categorie(nom: String, description: String)
+    +getCategorie(orderNum: int): Categorie
+    +getCategorieProducts(catId: int, limite: int): ArrayList<Product>
+    +getRowsDataAsString(): String[]
+    +getColumnsNamesForProducts(): String[]
+    +getColumsNames(): String[]
+    +getId(): int
+    +getNom(): String
+    +getDescription(): String
+  }
+
+  class Product {
+    -id: int
+    -titre: String
+    -quantite: float
+    -unite: String
+    -seuil: float
+    -prixAchat: float
+    -prixUnitaire: float
+    +Product(id: int, titre: String, quantite: float, unite: String, seuil: float, prixAchat: float, prixUnitaire: float)
+    +Product(titre: String, quantite: float, unite: String, seuil: float, prixAchat: float, prixUnitaire: float)
+    +getColumnsNames(): String[]
+    +getRowsDataAsString(): String[]
+    +getAllProducts(pageNum: int, limit: int): ArrayList<Product>
+    +getProductById(id: int): Product
+    +searchProductByTitle(searchTerm: String): Product
+    +searchProductsByTitle(searchTerm: String): ArrayList<Product>
+    +getProductsBelowSeuil(): ArrayList<Product>
+    +update()
+    +getId(): int
+    +getTitre(): String
+    +setTitre(titre: String)
+    +getQuantite(): float
+    +setQuantite(quantite: float)
+    +getUnite(): String
+    +setUnite(unite: String)
+    +getSeuil(): float
+    +setSeuil(seuil: float)
+    +getPrixAchat(): float
+    +setPrixAchat(prixAchat: float)
+    +getPrixUnitaire(): float
+    +setPrixUnitaire(prixUnitaire: float)
+  }
+}
+
+package "actionsPages" {
+  interface simplePageInt {
+    +showPage()
+  }
+
+  class SetQuantitePage {
+    +showPage()
+    -selectById()
+    -selectByTitle()
+    -modifyQuantity(product: Product)
+    -addQuantity(product: Product)
+    -removeQuantity(product: Product)
+    -setQuantity(product: Product)
+  }
+
+  class SeuilAlertPage {
+    +showPage()
+  }
+}
+
+package "database" {
+  class DatabaseManager {
+    -cn: Connection
+    +DatabaseManager(url: String, username: String, password: String)
+    +getConnection(): Connection
+    +closeConnection()
+  }
+}
+
+package "navigation" {
+  class Konsole {
+    -sc: Scanner
+    +showTitle(name: String)
+    +showLine()
+    +clearConsole()
+    +readUserInputInt(): int
+    +readUserLine(): String
+    +closeScanner()
+    +showNavigator()
+    +printTable(tables: ArrayList<? extends Table>, columns: String[])
+    +sleep(ms: int)
+  }
+}
+
+package "pages" {
+  abstract class Page {
+    #pageName: String
+    +Page(pageName: String)
+    +showPage(pageNum: int, limite: int)
+    #addItem(columnsNames: String[])
+  }
+
+  class CategoriePage {
+    +CategoriePage()
+    +showPage(pageNum: int, limite: int)
+    #addItem(columnsNames: String[])
+  }
+
+  class ProductPage {
+    +ProductPage()
+    +showPage(pageNum: int, limite: int)
+    #addItem(columnsNames: String[])
+    -searchProduct()
+  }
+}
+
+
+' Relationships
+simplePageInt <|.. SetQuantitePage
+simplePageInt <|.. SeuilAlertPage
+Page <|-- CategoriePage
+Page <|-- ProductPage
+Table <|-- Categorie
+Table <|-- Product
+
+SetQuantitePage --> Product : usages
+CategoriePage ---> Categorie : usages
+SeuilAlertPage --> Product : usages
+CategoriePage --> Product : affichages
+ProductPage --> Product : gère
+Konsole --> SetQuantitePage : usages
+Konsole --> SeuilAlertPage : usages
+Konsole --> CategoriePage : usages
+Konsole --> ProductPage : usages
+Categorie --> Product : associé
+Product --> DatabaseManager : persister
+Categorie --> DatabaseManager : persister
+
+@enduml
