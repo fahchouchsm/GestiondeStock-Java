@@ -1,6 +1,5 @@
 @startuml Stock Management System Class Diagram
 
-
 package "tables" {
   abstract class Table {
     #tableName: String
@@ -17,6 +16,8 @@ package "tables" {
     +Categorie(nom: String, description: String)
     +getCategorie(orderNum: int): Categorie
     +getCategorieProducts(catId: int, limite: int): ArrayList<Product>
+    +isProductInCategory(categoryId: int, productId: int): boolean
+    +addProductToCategory(categoryId: int, productId: int)
     +getRowsDataAsString(): String[]
     +getColumnsNamesForProducts(): String[]
     +getColumsNames(): String[]
@@ -115,6 +116,7 @@ package "pages" {
     +CategoriePage()
     +showPage(pageNum: int, limite: int)
     #addItem(columnsNames: String[])
+    -addProductToCategory(categoryId: int)
   }
 
   class ProductPage {
@@ -125,26 +127,25 @@ package "pages" {
   }
 }
 
-
 ' Relationships
 simplePageInt <|.. SetQuantitePage
-simplePageInt <|.. SeuilAlertPage
+simplePageInt <| bandas.. SeuilAlertPage
 Page <|-- CategoriePage
 Page <|-- ProductPage
 Table <|-- Categorie
 Table <|-- Product
 
 SetQuantitePage --> Product : usages
-CategoriePage ---> Categorie : usages
+CategoriePage --> Categorie : usages
+CategoriePage --> Product : manages
 SeuilAlertPage --> Product : usages
-CategoriePage --> Product : affichages
-ProductPage --> Product : gère
+ProductPage --> Product : manages
 Konsole --> SetQuantitePage : usages
 Konsole --> SeuilAlertPage : usages
 Konsole --> CategoriePage : usages
 Konsole --> ProductPage : usages
-Categorie --> Product : associé
-Product --> DatabaseManager : persister
-Categorie --> DatabaseManager : persister
+Categorie --> Product : associated
+Product --> DatabaseManager : persists
+Categorie --> DatabaseManager : persists
 
 @enduml
