@@ -129,23 +129,23 @@ package "pages" {
 
 ' Relationships
 simplePageInt <|.. SetQuantitePage
-simplePageInt <| bandas.. SeuilAlertPage
+simplePageInt <|.. SeuilAlertPage
 Page <|-- CategoriePage
 Page <|-- ProductPage
 Table <|-- Categorie
 Table <|-- Product
 
-SetQuantitePage --> Product : usages
-CategoriePage --> Categorie : usages
-CategoriePage --> Product : manages
-SeuilAlertPage --> Product : usages
-ProductPage --> Product : manages
-Konsole --> SetQuantitePage : usages
-Konsole --> SeuilAlertPage : usages
-Konsole --> CategoriePage : usages
-Konsole --> ProductPage : usages
-Categorie --> Product : associated
-Product --> DatabaseManager : persists
-Categorie --> DatabaseManager : persists
+SetQuantitePage "*"-->"*" Product : usages
+CategoriePage "1"--->"*" Categorie : usages
+CategoriePage "*"-->"*" Product : manages
+SeuilAlertPage "*"-->"*" Product : usages
+ProductPage "*"-->"*" Product : manages
+Konsole "1"-->"0..1" SetQuantitePage : usages
+Konsole "1"-->"0..1" SeuilAlertPage : usages
+Konsole "1"-->"0..1" CategoriePage : usages
+Konsole "1"-->"0..1" ProductPage : usages
+Categorie "*"-->"*" Product : associated
+Product "*"-->"1" DatabaseManager : persists
+Categorie "*"-->"1" DatabaseManager : persists
 
 @enduml
