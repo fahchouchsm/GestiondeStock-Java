@@ -8,7 +8,7 @@ public class DatabaseManager {
 
     public DatabaseManager(String url, String username, String password) {
         try {
-            if (cn == null || cn.isClosed()) {
+            if (cn == null) {
                 Class.forName("com.mysql.cj.jdbc.Driver");
                 cn = DriverManager.getConnection(url, username, password);
                 System.out.println("CoConnecté à db");

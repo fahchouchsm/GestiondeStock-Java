@@ -84,6 +84,36 @@ public class Categorie extends Table {
         }
     }
 
+    public static boolean isProductInCategory(int categoryId, int productId) {
+        try {
+            String query = "SELECT * FROM categorie_products WHERE idCategorie = ? AND idProduit = ?";
+            PreparedStatement ps = DatabaseManager.getConnection().prepareStatement(query);
+            ps.setInt(1, categoryId);
+            ps.setInt(2, productId);
+            ResultSet rs = ps.executeQuery();
+            boolean exists = rs.next();
+            rs.close();
+            ps.close();
+            return exists;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public static void addProductToCategory(int categoryId, int productId) {
+        try {
+            String query = "INSERT INTO categorie_products (idCategorie, idProduit) VALUES (?, ?)";
+            PreparedStatement ps = DatabaseManager.getConnection().prepareStatement(query);
+            ps.setInt(1, categoryId);
+            ps.setInt(2, productId);
+            ps.executeUpdate();
+            ps.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public String[] getRowsDataAsString() {
         return new String[] { Integer.toString(id), nom, description };
