@@ -1,0 +1,30 @@
+@startuml Stock Management System Class Diagram
+
+
+package "database" {
+  class DatabaseManager {
+    -cn: Connection
+    +DatabaseManager(url: String, username: String, password: String)
+    +getConnection(): Connection
+    +closeConnection()
+  }
+}
+
+package "navigation" {
+  class Konsole {
+    -sc: Scanner
+    +showTitle(name: String)
+    +showLine()
+    +clearConsole()
+    +readUserInputInt(): int
+    +readUserLine(): String
+    +closeScanner()
+    +showNavigator()
+    +printTable(tables: ArrayList<? extends Table>, columns: String[])
+    +sleep(ms: int)
+  }
+}
+
+
+
+@enduml

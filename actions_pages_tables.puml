@@ -1,0 +1,121 @@
+@startuml ActionsPages, Pages, and Tables Class Diagram
+
+package "tables" {
+  abstract class Table {
+    #tableName: String
+    +Table(tableName: String)
+    +getRowsDataAsString(): String[]
+    #fetchTable(tableName: String, pageNum: int, limite: int): ResultSet
+  }
+
+  class Categorie {
+    -id: int
+    -nom: String
+    -description: String
+    +Categorie(id: int, nom: String, description: String)
+    +Categorie(nom: String, description: String)
+    +getCategorie(orderNum: int): Categorie
+    +getCategorieProducts(catId: int, limite: int): ArrayList<Product>
+    +isProductInCategory(categoryId: int, productId: int): boolean
+    +addProductToCategory(categoryId: int, productId: int)
+    +getRowsDataAsString(): String[]
+    +getColumnsNamesForProducts(): String[]
+    +getColumsNames(): String[]
+    +getId(): int
+    +getNom(): String
+    +getDescription(): String
+  }
+
+  class Product {
+    -id: int
+    -titre: String
+    -quantite: float
+    -unite: String
+    -seuil: float
+    -prixAchat: float
+    -prixUnitaire: float
+    +Product(id: int, titre: String, quantite: float, unite: String, seuil: float, prixAchat: float, prixUnitaire: float)
+    +Product(titre: String, quantite: float, unite: String, seuil: float, prixAchat: float, prixUnitaire: float)
+    +getColumnsNames(): String[]
+    +getRowsDataAsString(): String[]
+    +getAllProducts(pageNum: int, limit: int): ArrayList<Product>
+    +getProductById(id: int): Product
+    +searchProductByTitle(searchTerm: String): Product
+    +searchProductsByTitle(searchTerm: String): ArrayList<Product>
+    +getProductsBelowSeuil(): ArrayList<Product>
+    +update()
+    +getId(): int
+    +getTitre(): String
+    +setTitre(titre: String)
+    +getQuantite(): float
+    +setQuantite(quantite: float)
+    +getUnite(): String
+    +setUnite(unite: String)
+    +getSeuil(): float
+    +setSeuil(seuil: float)
+    +getPrixAchat(): float
+    +setPrixAchat(prixAchat: float)
+    +getPrixUnitaire(): float
+    +setPrixUnitaire(prixUnitaire: float)
+  }
+}
+
+package "actionsPages" {
+  interface simplePageInt {
+    +showPage()
+  }
+
+  class SetQuantitePage {
+    +showPage()
+    -selectById()
+    -selectByTitle()
+    -modifyQuantity(product: Product)
+    -addQuantity(product: Product)
+    -removeQuantity(product: Product)
+    -setQuantity(product: Product)
+  }
+
+  class SeuilAlertPage {
+    +showPage()
+  }
+}
+
+package "pages" {
+  abstract class Page {
+    #pageName: String
+    +Page(pageName: String)
+    +showPage(pageNum: int, limite: int)
+    #addItem(columnsNames: String[])
+  }
+
+  class CategoriePage {
+    +CategoriePage()
+    +showPage(pageNum: int, limite: int)
+    #addItem(columnsNames: String[])
+    -addProductToCategory(categoryId: int)
+  }
+
+  class ProductPage {
+    +ProductPage()
+    +showPage(pageNum: int, limite: int)
+    #addItem(columnsNames: String[])
+    -searchProduct()
+  }
+}
+
+' Relationships
+simplePageInt <|.. SetQuantitePage
+simplePageInt <|.. SeuilAlertPage
+Page <|-- CategoriePage
+Page <|-- ProductPage
+Table <|-- Categorie
+Table <|-- Product
+
+SetQuantitePage "*"-->"*" Product : usages
+CategoriePage "1"-->"*" Categorie : usages
+CategoriePage "*"-->"*" Product : manages
+SeuilAlertPage "*"-->"*" Product : usages
+ProductPage "*"-->"*" Product : manages
+Categorie "*"-->"*" Product : associated
+
+@enduml
